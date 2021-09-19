@@ -54,3 +54,14 @@ INSERT INTO tb_product_category (product_id, category_id) VALUES (22, 3);
 INSERT INTO tb_product_category (product_id, category_id) VALUES (23, 3);
 INSERT INTO tb_product_category (product_id, category_id) VALUES (24, 3);
 INSERT INTO tb_product_category (product_id, category_id) VALUES (25, 3);
+
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Laís Olivia Aparecida Viana', '02430750228', 5731.9, TIMESTAMP WITH TIME ZONE '1985-07-14T10:00:00Z', 2)
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Sandra Helena Vera Farias','02972335481',3260.0, TIMESTAMP WITH TIME ZONE '1999-03-12T17:50:30Z', 0)
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Julio Levi Murilo Figueiredo','95845777437',3950.1, TIMESTAMP WITH TIME ZONE '1987-06-15T23:10:00Z', 1)
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Heitor Carlos Eduardo Mário Dias','22325440362',7230.0, TIMESTAMP WITH TIME ZONE '1995-12-27T11:50:00Z', 0)
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Nelson Filipe Anderson da Mata','08127860174',4551.7, TIMESTAMP WITH TIME ZONE '1991-03-13T15:07:00Z', 0)
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Bento Enrico Julio da Rocha','61149606703',5140.43, TIMESTAMP WITH TIME ZONE '1967-05-06T19:31:00Z', 3)
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Filipe Victor Ruan da Mata','54697826205',2700.50, TIMESTAMP WITH TIME ZONE '1989-09-03T13:42:00Z', 0)
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Jéssica Manuela Drumond','299930094730',9670.30, TIMESTAMP WITH TIME ZONE '1976-02-21T08:21:00Z', 2)
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Clarice Heloisa Isabelly Jesus','06833770271',3108.0, TIMESTAMP WITH TIME ZONE '2006-10-19T03:53:00Z', 0)
+INSERT INTO tb_client (name, cpf, income, birth_date, children) VALUES ('Oliver Elias da Silva','71589263626',4810.0, TIMESTAMP WITH TIME ZONE '2001-01-15T12:10:00Z', 1)

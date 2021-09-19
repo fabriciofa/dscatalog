@@ -1,5 +1,7 @@
 package com.devsuperior.dscatalog.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsuperior.dscatalog.dto.ClientDTO;
 import com.devsuperior.dscatalog.entities.Client;
 import com.devsuperior.dscatalog.repositories.ClientRepository;
+import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ClientService {
@@ -20,6 +23,13 @@ public class ClientService {
 	public Page<ClientDTO> findAllPaged(PageRequest pageRequest) {
 		Page<Client> list = clientRepository.findAll(pageRequest);
 		return list.map(x -> new ClientDTO(x));
+	}
+	
+	@Transactional(readOnly = true)
+	public ClientDTO findById(Long id) {
+		Optional<Client> obj = clientRepository.findById(id);
+		Client entity = obj.orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+		return new ClientDTO(entity);
 	}
 
 }
