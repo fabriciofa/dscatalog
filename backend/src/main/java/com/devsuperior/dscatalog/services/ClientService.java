@@ -26,7 +26,7 @@ public class ClientService {
 		Page<Client> list = clientRepository.findAll(pageRequest);
 		return list.map(x -> new ClientDTO(x));
 	}
-	
+
 	@Transactional(readOnly = true)
 	public ClientDTO findById(Long id) {
 		Optional<Client> obj = clientRepository.findById(id);
@@ -53,7 +53,11 @@ public class ClientService {
 			throw new ResourceNotFoundException("Resource not found");
 		}
 	}
-	
+
+	public void delete(Long id) {
+		clientRepository.deleteById(id);
+	}
+
 	private void copyDtoToEntity(ClientDTO dto, Client entity) {
 		entity.setName(dto.getName());
 		entity.setCpf(dto.getCpf());
@@ -61,5 +65,5 @@ public class ClientService {
 		entity.setBirthDate(dto.getBirthDate());
 		entity.setChildren(dto.getChildren());
 	}
-	
+
 }
