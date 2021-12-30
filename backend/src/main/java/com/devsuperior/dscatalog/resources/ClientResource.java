@@ -2,6 +2,8 @@ package com.devsuperior.dscatalog.resources;
 
 import java.net.URI;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,14 +41,14 @@ public class ClientResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ClientDTO> save(@RequestBody ClientDTO dto) {
+	public ResponseEntity<ClientDTO> save(@Valid @RequestBody ClientDTO dto) {
 		dto = clientService.save(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(dto.getId()).toUri();
 		return ResponseEntity.created(uri).body(dto);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<ClientDTO> update(@PathVariable Long id, @RequestBody ClientDTO dto) {
+	public ResponseEntity<ClientDTO> update(@PathVariable Long id, @Valid @RequestBody ClientDTO dto) {
 		dto = clientService.update(id, dto);
 		return ResponseEntity.ok().body(dto);
 	}

@@ -3,12 +3,16 @@ package com.devsuperior.dscatalog.dto;
 import java.io.Serializable;
 import java.time.Instant;
 
+import javax.validation.constraints.NotBlank;
+
 import com.devsuperior.dscatalog.entities.Client;
 
 public class ClientDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
+	
+	@NotBlank(message = "O campo nome não pode ser vazio")
 	private String name;
 	private String cpf;
 	private Double income;
