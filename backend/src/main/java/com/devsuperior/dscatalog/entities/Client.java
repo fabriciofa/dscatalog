@@ -1,5 +1,6 @@
 package com.devsuperior.dscatalog.entities;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -12,8 +13,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tb_client")
-public class Client {
-
+public class Client implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
