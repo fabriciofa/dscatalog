@@ -1,14 +1,9 @@
 import './assets/styles/custom.scss';
-import Navbar from 'components/Navbar';
+import Home from 'pages/Home';
 import './App.css';
 
 const App = () => {
-  return (
-    <>
-      <Navbar />
-      <h1>Hello DSCatalog</h1>
-    </>
-  );
+  return <Home />
 };
 
 export default App;
