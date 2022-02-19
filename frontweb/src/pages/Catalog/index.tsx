@@ -1,8 +1,9 @@
 import ProductCard from 'components/ProductCard';
+import { Product } from 'types/product';
 
 const Catalog = () => {
   
-  const product = {
+  const product : Product = {
     id: 1,
     name: 'The Lord of the Rings',
     description:
