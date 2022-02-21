@@ -20,7 +20,7 @@ const ProductDetails = () => {
     axios.get(`${BASE_URL}/products/${productId}`).then((respone) => {
       setProduct(respone.data);
     });
-  }, []);
+  }, [productId]);
 
   return (
     <div className="product-details-container">
