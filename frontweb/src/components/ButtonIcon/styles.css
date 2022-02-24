@@ -3,6 +3,7 @@
 }
 
 .btn-container .btn {
+  width: calc(100% - 50px);
   border-radius: 10px 0 0 10px;
 }
 
@@ -26,5 +27,14 @@
 @media (min-width: 576px) {
   .btn h6 {
     font-size: 18px;
+  }
+
+  .btn-icon-container {
+    height: 70px;
+    width: 70px;
+  }
+
+  .btn-container .btn {
+    width: calc(100% - 70px);
   }
 }
