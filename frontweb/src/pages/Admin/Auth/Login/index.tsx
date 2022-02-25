@@ -12,7 +12,11 @@ type FormData = {
 };
 
 const Login = () => {
-  const { register, handleSubmit } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const [hasError, setHasError] = useState(false);
 
@@ -39,21 +43,35 @@ const Login = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <input
-            {...register('username')}
+            {...register('username', {
+              required: 'Campo obrigatório',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'E-mail inválido',
+              },
+            })}
             type="text"
             className="form-control base-input"
             name="username"
             placeholder="Email"
           />
+          <div className="invalid-feedback d-block">
+            {errors.username?.message}
+          </div>
         </div>
         <div className="mb-2">
           <input
-            {...register('password')}
+            {...register('password', {
+              required: 'Campo obrigatório',
+            })}
             type="password"
             className="form-control base-input"
             name="password"
             placeholder="Senha"
           />
+          <div className="invalid-feedback d-block">
+            {errors.password?.message}
+          </div>
         </div>
         <Link to="/admin/auth/recover" className="login-link-recover">
           Esqueceu sua senha?
