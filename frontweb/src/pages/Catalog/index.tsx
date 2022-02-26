@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from 'types/product';
 import { requestBackend } from 'util/requests';
-import { SpringPage } from 'util/vendor/spring';
+import { SpringPage } from 'types/vendor/spring';
 import CardLoader from './CardLoader';
 
 import './styles.css';
