@@ -1,12 +1,47 @@
 import './styles.css';
 import 'bootstrap/js/dist/collapse';
 import { Link, NavLink } from 'react-router-dom';
+import {
+  getTokenData,
+  isAuthenticated,
+  removeAuthData,
+  TokenData,
+} from 'util/requests';
+import { useEffect, useState } from 'react';
+import history from 'util/history';
+
+type AuthData = {
+  authenticated: boolean;
+  tokenData?: TokenData;
+};
 
 const Navbar = () => {
+  const [authData, setAuthData] = useState<AuthData>({ authenticated: false });
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      setAuthData({
+        authenticated: true,
+        tokenData: getTokenData(),
+      });
+    } else {
+      setAuthData({
+        authenticated: false,
+      });
+    }
+  }, []);
+
+  const handleLogoutClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    setAuthData({ authenticated: false });
+    removeAuthData();
+    history.replace('/');
+  };
+
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-primary main-nav">
       <div className="container-fluid">
-        <Link to="/" className='nav-logo-text'>
+        <Link to="/" className="nav-logo-text">
           <h4>DSCatalog</h4>
         </Link>
 
@@ -40,6 +75,18 @@ const Navbar = () => {
               </NavLink>
             </li>
           </ul>
+        </div>
+        <div>
+          {authData.authenticated ? (
+            <>
+              {authData.tokenData?.user_name}
+              <a href="#logout" onClick={handleLogoutClick}>
+                LOGOUT
+              </a>
+            </>
+          ) : (
+            <Link to={'/admin/auth'}>LOGIN</Link>
+          )}
         </div>
       </div>
     </nav>
