@@ -8,7 +8,6 @@ import { isAuthenticated } from 'util/requests';
 const Home = () => {
   return (
     <div className="home-container">
-      <h1>{isAuthenticated() ? "LOGADO" : "DESLOGADO"}</h1>
       <div className="base-card home-card">
         <div className="home-content-container">
           <div>
