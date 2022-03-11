@@ -3,8 +3,13 @@ import { Link, useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import './styles.css';
-import { backendRequestLogin, getAuthData, saveAuthData } from 'util/requests';
-import { useState } from 'react';
+import {
+  backendRequestLogin,
+  getTokenData,
+  saveAuthData,
+} from 'util/requests';
+import { useContext, useState } from 'react';
+import { AuthContext } from 'AuthContext';
 
 type FormData = {
   username: string;
@@ -18,6 +23,7 @@ const Login = () => {
     formState: { errors },
   } = useForm<FormData>();
 
+  const { setAuthContextData } = useContext(AuthContext);
   const [hasError, setHasError] = useState(false);
   const history = useHistory();
 
@@ -27,9 +33,7 @@ const Login = () => {
         setHasError(false);
         saveAuthData(response.data);
         history.push('/admin');
-        const token = getAuthData().access_token;
-        console.log(token);
-        console.log('SUCESSO', response);
+        setAuthContextData({ authenticated: true, tokenData: getTokenData() });
       })
       .catch((errors) => {
         setHasError(true);
