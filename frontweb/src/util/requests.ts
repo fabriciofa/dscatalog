@@ -12,7 +12,7 @@ type LoginResponse = {
   userId: number;
 };
 
-type Role = 'ROLE_OPERATOR' | 'ROLE_ADMIN';
+export type Role = 'ROLE_OPERATOR' | 'ROLE_ADMIN';
 
 export type TokenData = {
   exp: number;
@@ -77,18 +77,6 @@ export const removeAuthData = () => {
   localStorage.removeItem(tokenKey);
 };
 
-// Add a request interceptor
-axios.interceptors.request.use(
-  function (config) {
-    //
-    return config;
-  },
-  function (error) {
-    //
-    return Promise.reject(error);
-  }
-);
-
 // Add a response interceptor
 axios.interceptors.response.use(
   function (response) {
@@ -96,7 +84,7 @@ axios.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (error.response.status === 401 || error.response.status === 403) {
+    if (error.response.status === 401) {
       history.push('/admin/auth');
     }
     return Promise.reject(error);
