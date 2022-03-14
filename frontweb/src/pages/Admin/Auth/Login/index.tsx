@@ -1,13 +1,11 @@
 import ButtonIcon from 'components/ButtonIcon';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import {
-  backendRequestLogin,
-  getTokenData,
-  saveAuthData,
-} from 'util/requests';
+import { backendRequestLogin } from 'util/requests';
 import { useContext, useState } from 'react';
 import { AuthContext } from 'AuthContext';
+import { saveAuthData } from 'util/storage';
+import { getTokenData } from 'util/auth';
 
 import './styles.css';
 
@@ -18,19 +16,23 @@ type FormData = {
 
 type LocationState = {
   from: string;
-}
+};
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
-  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+
   const { setAuthContextData } = useContext(AuthContext);
 
   const [hasError, setHasError] = useState(false);
-  
+
   const history = useHistory();
 
   const location = useLocation<LocationState>();
-  const { from } = location.state || { from: { pathname: '/admin' } }
+  const { from } = location.state || { from: { pathname: '/admin' } };
 
   const onSubmit = (formData: FormData) => {
     backendRequestLogin(formData)
