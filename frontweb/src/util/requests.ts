@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import jwtDecode from 'jwt-decode';
 import qs from 'qs';
 import history from './history';
 import { getAuthData } from './storage';
