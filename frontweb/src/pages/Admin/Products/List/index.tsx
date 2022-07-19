@@ -17,7 +17,7 @@ const List = () => {
       url: `/products`,
       params: {
         page: 0,
-        size: 12,
+        size: 100,
       },
     };
     requestBackend(params).then((response) => {
@@ -37,7 +37,7 @@ const List = () => {
       </div>
       <div className="row">
         {list?.content.map(
-          product => <ProductCrudCard product={product} />
+          product => <ProductCrudCard product={product} key={product.id} />
         )}
       </div>
     </div>
