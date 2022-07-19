@@ -21,7 +21,7 @@ const Form = () => {
       data,
     };
 
-    requestBackend(config).then((response) => console.log);
+    requestBackend(config).then(() => history.push('/admin/products'));
   };
 
   const handleCancel = () => {
