@@ -1,22 +1,52 @@
 import { AxiosRequestConfig } from 'axios';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import { Product } from 'types/product';
 import history from 'util/history';
 import { requestBackend } from 'util/requests';
 import './styles.css';
+
+type UrlParams = {
+  productId: string;
+};
 
 const Form = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<Product>();
 
+  const { productId } = useParams<UrlParams>();
+
+  const isEditing = productId !== 'create';
+
+  useEffect(() => {
+    requestBackend({ url: `/products/${productId}` }).then((response) => {
+      if (isEditing) {
+        const product = response.data as Product;
+        setValue('name', product.name);
+        setValue('price', product.price);
+        setValue('description', product.description);
+        setValue('imgUrl', product.imgUrl);
+        setValue('categories', product.categories);
+      }
+    });
+  }, [productId, setValue, isEditing]);
+
   const onSubmit = (formData: Product) => {
-    const data = { ...formData, categories: [{ id: 1, name: '' }] };
+    const data = {
+      ...formData,
+      imgUrl: isEditing
+        ? formData.imgUrl
+        : 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg',
+      categories: isEditing ? formData.categories : [{ id: 1, name: '' }],
+    };
     const config: AxiosRequestConfig = {
-      method: 'POST',
-      url: '/products',
+      method: isEditing ? 'PUT' : 'POST',
+      url: isEditing ? `/products/${productId}` : '/products',
       withCredentials: true,
       data,
     };
@@ -25,8 +55,8 @@ const Form = () => {
   };
 
   const handleCancel = () => {
-    history.push('/admin/products')
-  }
+    history.push('/admin/products');
+  };
 
   return (
     <div className="product-crud-container">
