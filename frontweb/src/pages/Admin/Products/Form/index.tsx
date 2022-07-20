@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from 'axios';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
+import Select from 'react-select';
 import { Product } from 'types/product';
 import history from 'util/history';
 import { requestBackend } from 'util/requests';
@@ -12,6 +13,12 @@ type UrlParams = {
 };
 
 const Form = () => {
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+  ];
+
   const {
     register,
     handleSubmit,
@@ -81,6 +88,11 @@ const Form = () => {
                   {errors.name?.message}
                 </div>
               </div>
+
+              <div className="margin-bottom-30">
+                <Select options={options} isMulti classNamePrefix="product-crud-select" />
+              </div>
+
               <div>
                 <input
                   type="text"
