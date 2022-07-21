@@ -20,6 +20,9 @@ const List = () => {
       method: 'GET',
       url: '/products',
       withCredentials: true,
+      params: {
+        size: 30,
+      }
     }
     requestBackend(config)
       .then(response => {

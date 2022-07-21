@@ -1,12 +1,13 @@
 import { AxiosRequestConfig } from 'axios';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { Category } from 'types/category';
 import { Product } from 'types/product';
 import history from 'util/history';
 import { requestBackend } from 'util/requests';
+
 import './styles.css';
 
 type UrlParams = {
@@ -21,6 +22,7 @@ const Form = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    control,
   } = useForm<Product>();
 
   const { productId } = useParams<UrlParams>();
@@ -39,31 +41,24 @@ const Form = () => {
   }, []);
 
   useEffect(() => {
-    requestBackend({ url: `/products/${productId}` }).then((response) => {
-      if (isEditing) {
+    if (isEditing) {
+      requestBackend({ url: `/products/${productId}` }).then((response) => {
         const product = response.data as Product;
         setValue('name', product.name);
         setValue('price', product.price);
         setValue('description', product.description);
         setValue('imgUrl', product.imgUrl);
         setValue('categories', product.categories);
-      }
-    });
+      });
+    }
   }, [productId, setValue, isEditing]);
 
   const onSubmit = (formData: Product) => {
-    const data = {
-      ...formData,
-      imgUrl: isEditing
-        ? formData.imgUrl
-        : 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg',
-      categories: isEditing ? formData.categories : [{ id: 1, name: '' }],
-    };
     const config: AxiosRequestConfig = {
       method: isEditing ? 'PUT' : 'POST',
       url: isEditing ? `/products/${productId}` : '/products',
       withCredentials: true,
-      data,
+      data: formData,
     };
 
     requestBackend(config).then(() => history.push('/admin/products'));
@@ -98,16 +93,31 @@ const Form = () => {
               </div>
 
               <div className="margin-bottom-30">
-                <Select
-                  options={selectCategories}
-                  isMulti
-                  classNamePrefix="product-crud-select"
-                  getOptionLabel={(category :Category) => category.name}
-                  getOptionValue={(category: Category) => String(category.id)}
+                <Controller
+                  name="categories"
+                  rules={{ required: true }}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={selectCategories}
+                      isMulti
+                      classNamePrefix="product-crud-select"
+                      getOptionLabel={(category: Category) => category.name}
+                      getOptionValue={(category: Category) =>
+                        String(category.id)
+                      }
+                    />
+                  )}
                 />
+                {errors.categories && (
+                  <div className="invalid-feedback d-block">
+                    Campo obrigatório
+                  </div>
+                )}
               </div>
 
-              <div>
+              <div className="margin-bottom-30">
                 <input
                   type="text"
                   {...register('price', {
@@ -121,6 +131,27 @@ const Form = () => {
                 />
                 <div className="invalid-feedback d-block">
                   {errors.price?.message}
+                </div>
+              </div>
+
+              <div className="margin-bottom-30">
+                <input
+                  type="text"
+                  {...register('imgUrl', {
+                    required: 'Campo obrigatório',
+                    pattern: {
+                      value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm,
+                      message: 'URL inválida'
+                    },
+                  })}
+                  className={`form-control base-input ${
+                    errors.imgUrl ? 'is-invalid' : ''
+                  }`}
+                  placeholder="URL da Imagem do Produto"
+                  name="imgUrl"
+                />
+                <div className="invalid-feedback d-block">
+                  {errors.imgUrl?.message}
                 </div>
               </div>
             </div>
