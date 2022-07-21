@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
+import Pagination from 'components/Pagination';
 import ProductCrudCard from 'pages/Admin/Products/ProductCrudCard';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,7 +13,7 @@ const List = () => {
   const [list, setList] = useState<SpringPage<Product>>();
 
   useEffect(() => {
-    getProducts()
+    getProducts();
   }, []);
 
   const getProducts = () => {
@@ -21,31 +22,35 @@ const List = () => {
       url: '/products',
       withCredentials: true,
       params: {
-        size: 30,
-      }
-    }
-    requestBackend(config)
-      .then(response => {
-        setList(response.data)
-      })
-  }
+        size: 12,
+      },
+    };
+    requestBackend(config).then((response) => {
+      setList(response.data);
+    });
+  };
 
   return (
-    <div className="product-crud-container">
-      <div className="product-crud-bar-container">
-        <Link to="/admin/products/create">
-          <button className="btn btn-primary text-white btn-crud-add">
-            ADICIONAR
-          </button>
-        </Link>
-        <div className="base-card product-filter-container">Search bar</div>
+      <div className="product-crud-container">
+        <div className="product-crud-bar-container">
+          <Link to="/admin/products/create">
+            <button className="btn btn-primary text-white btn-crud-add">
+              ADICIONAR
+            </button>
+          </Link>
+          <div className="base-card product-filter-container">Search bar</div>
+        </div>
+        <div className="row">
+          {list?.content.map((product) => (
+            <ProductCrudCard
+              product={product}
+              onDelete={() => getProducts()}
+              key={product.id}
+            />
+          ))}
+        </div>
+        <Pagination />
       </div>
-      <div className="row">
-        {list?.content.map(
-          product => <ProductCrudCard product={product} onDelete={() => getProducts()} key={product.id} />
-        )}
-      </div>
-    </div>
   );
 };
 
