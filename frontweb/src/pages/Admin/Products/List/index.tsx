@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import Pagination from 'components/Pagination';
 import ProductCrudCard from 'pages/Admin/Products/ProductCrudCard';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from 'types/product';
 import { SpringPage } from 'types/vendor/spring';
@@ -9,49 +9,66 @@ import { requestBackend } from 'util/requests';
 
 import './styles.css';
 
+type ControlComponentsData = {
+  activePage: number;
+};
+
 const List = () => {
   const [page, setPage] = useState<SpringPage<Product>>();
 
-  useEffect(() => {
-    getProducts(0);
-  }, []);
+  const [controlComponentsData, setControlComponentsData] =
+    useState<ControlComponentsData>({
+      activePage: 0,
+    });
 
-  const getProducts = (pageNumber : number) => {
+  const handlePageChange = (pageNumber: number) => {
+    setControlComponentsData({ activePage: pageNumber });
+  };
+
+  const getProcuts = useCallback(() => {
     const config: AxiosRequestConfig = {
       method: 'GET',
       url: '/products',
       withCredentials: true,
       params: {
-        page: pageNumber,
+        page: controlComponentsData?.activePage,
         size: 3,
       },
     };
     requestBackend(config).then((response) => {
       setPage(response.data);
     });
-  };
+  }, [controlComponentsData]);
+
+  useEffect(() => {
+    getProcuts();
+  }, [getProcuts]);
 
   return (
-      <div className="product-crud-container">
-        <div className="product-crud-bar-container">
-          <Link to="/admin/products/create">
-            <button className="btn btn-primary text-white btn-crud-add">
-              ADICIONAR
-            </button>
-          </Link>
-          <div className="base-card product-filter-container">Search bar</div>
-        </div>
-        <div className="row">
-          {page?.content.map((product) => (
-            <ProductCrudCard
-              product={product}
-              onDelete={() => getProducts(page.number)}
-              key={product.id}
-            />
-          ))}
-        </div>
-        <Pagination pageCount={(page) ? page.totalPages : 0} range={3} onChange={getProducts}/>
+    <div className="product-crud-container">
+      <div className="product-crud-bar-container">
+        <Link to="/admin/products/create">
+          <button className="btn btn-primary text-white btn-crud-add">
+            ADICIONAR
+          </button>
+        </Link>
+        <div className="base-card product-filter-container">Search bar</div>
       </div>
+      <div className="row">
+        {page?.content.map((product) => (
+          <ProductCrudCard
+            product={product}
+            onDelete={() => {}}
+            key={product.id}
+          />
+        ))}
+      </div>
+      <Pagination
+        pageCount={page ? page.totalPages : 0}
+        range={3}
+        onChange={handlePageChange}
+      />
+    </div>
   );
 };
 
