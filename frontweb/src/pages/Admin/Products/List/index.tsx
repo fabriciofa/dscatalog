@@ -10,23 +10,24 @@ import { requestBackend } from 'util/requests';
 import './styles.css';
 
 const List = () => {
-  const [list, setList] = useState<SpringPage<Product>>();
+  const [page, setPage] = useState<SpringPage<Product>>();
 
   useEffect(() => {
-    getProducts();
+    getProducts(0);
   }, []);
 
-  const getProducts = () => {
+  const getProducts = (pageNumber : number) => {
     const config: AxiosRequestConfig = {
       method: 'GET',
       url: '/products',
       withCredentials: true,
       params: {
-        size: 12,
+        page: pageNumber,
+        size: 3,
       },
     };
     requestBackend(config).then((response) => {
-      setList(response.data);
+      setPage(response.data);
     });
   };
 
@@ -41,15 +42,15 @@ const List = () => {
           <div className="base-card product-filter-container">Search bar</div>
         </div>
         <div className="row">
-          {list?.content.map((product) => (
+          {page?.content.map((product) => (
             <ProductCrudCard
               product={product}
-              onDelete={() => getProducts()}
+              onDelete={() => getProducts(page.number)}
               key={product.id}
             />
           ))}
         </div>
-        <Pagination />
+        <Pagination pageCount={(page) ? page.totalPages : 0} range={3} onChange={getProducts}/>
       </div>
   );
 };
