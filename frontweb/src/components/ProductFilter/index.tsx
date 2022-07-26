@@ -9,17 +9,35 @@ import { requestBackend } from 'util/requests';
 
 type ProductFilterData = {
   name: string;
-  category: Category;
+  category: Category | null;
 };
 
 const ProductFilter = () => {
   const [selectCategories, setCategories] = useState<Category[]>([]);
 
-  const { register, handleSubmit, control } = useForm<ProductFilterData>();
+  const { register, handleSubmit, control, setValue, getValues } =
+    useForm<ProductFilterData>();
 
   const onSubmit = (formData: ProductFilterData) => {
     console.log(formData);
   };
+
+  const handleClearForm = () => {
+    setValue('name', '');
+    setValue('category', null);
+  };
+
+  const handleChangeCategory = (value: Category) => {
+    setValue('category', value);
+
+    const obj : ProductFilterData = {
+        name: getValues('name'),
+        category: getValues('category'),
+    }
+
+    console.log(obj);
+
+  }
 
   useEffect(() => {
     const config: AxiosRequestConfig = {
@@ -59,13 +77,19 @@ const ProductFilter = () => {
                   classNamePrefix="product-filter-select"
                   isClearable
                   placeholder="Categoria"
+                  onChange={value => handleChangeCategory(value as Category)}
                   getOptionLabel={(category: Category) => category.name}
                   getOptionValue={(category: Category) => String(category.id)}
                 />
               )}
             />
           </div>
-          <button className="btn btn-outline-secondary product-filter-btn-style">LIMPAR <span className="product-filter-btn-word">FILTRO</span></button>
+          <button
+            className="btn btn-outline-secondary product-filter-btn-style"
+            onClick={handleClearForm}
+          >
+            LIMPAR <span className="product-filter-btn-word">FILTRO</span>
+          </button>
         </div>
       </form>
     </div>
