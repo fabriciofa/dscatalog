@@ -8,6 +8,7 @@ import { Category } from 'types/category';
 import { Product } from 'types/product';
 import history from 'util/history';
 import { requestBackend } from 'util/requests';
+import { toast } from 'react-toastify';
 
 import './styles.css';
 
@@ -55,7 +56,10 @@ const Form = () => {
   }, [productId, setValue, isEditing]);
 
   const onSubmit = (formData: Product) => {
-    const data = {...formData, price: String(formData.price).replace(',', '.')}
+    const data = {
+      ...formData,
+      price: String(formData.price).replace(',', '.'),
+    };
     const config: AxiosRequestConfig = {
       method: isEditing ? 'PUT' : 'POST',
       url: isEditing ? `/products/${productId}` : '/products',
@@ -63,7 +67,10 @@ const Form = () => {
       data,
     };
 
-    requestBackend(config).then(() => history.push('/admin/products'));
+    requestBackend(config).then(() => {
+      toast.info('Producto cadastrado com sucesso!!!');
+      history.push('/admin/products');
+    });
   };
 
   const handleCancel = () => {
@@ -120,14 +127,16 @@ const Form = () => {
               </div>
 
               <div className="margin-bottom-30">
-                <Controller 
+                <Controller
                   name="price"
-                  rules={{required: 'Campo obrigatório'}}
+                  rules={{ required: 'Campo obrigatório' }}
                   control={control}
                   render={({ field }) => (
-                    <CurrencyInput 
+                    <CurrencyInput
                       placeholder="Preço"
-                      className={`form-control base-input ${errors.price ? 'is-invalid' : ''}`}
+                      className={`form-control base-input ${
+                        errors.price ? 'is-invalid' : ''
+                      }`}
                       disableGroupSeparators={true}
                       value={field.value}
                       onValueChange={field.onChange}
@@ -146,7 +155,7 @@ const Form = () => {
                     required: 'Campo obrigatório',
                     pattern: {
                       value: /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/gm,
-                      message: 'URL inválida'
+                      message: 'URL inválida',
                     },
                   })}
                   className={`form-control base-input ${
