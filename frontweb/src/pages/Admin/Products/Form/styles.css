@@ -46,6 +46,10 @@
   color: #9E9E9E !important;
 }
 
+.product-crud-select__indicator-separator {
+  display: none;
+}
+
 @media (min-width: 576px) {
   .product-crud-buttons-container {
     justify-content: flex-end;
